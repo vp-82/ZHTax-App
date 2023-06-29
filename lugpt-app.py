@@ -24,8 +24,8 @@ if "assistant_responses" not in st.session_state:
     st.session_state["assistant_responses"] = []
 
 # Add a button to clear the chat
-if st.button("Clear Chat"):
-    st.session_state["messages"] = [{"role": "assistant", "content": "Wie kann ich helfen?"}]
+# if st.button("Clear Chat"):
+#     st.session_state["messages"] = [{"role": "assistant", "content": "Wie kann ich helfen?"}]
 
 with st.form("chat_input", clear_on_submit=True):
     a, b = st.columns([4, 1])
