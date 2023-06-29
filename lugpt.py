@@ -25,7 +25,7 @@ class QueryHandler:
         connection_args = {
             "uri": "https://in03-5052868020ac71b.api.gcp-us-west1.zillizcloud.com",
             "user": "vaclav@pechtor.ch",
-            "token": milvus_api_key,
+            "token": self.milvus_api_key,
             "secure": True,
         }
 
@@ -37,6 +37,36 @@ class QueryHandler:
             connection_args=connection_args,
         )
         self.chat_history = []
+
+
+    def process_output(self, output):
+        # Check if 'SOURCES: \n' is in the output
+        if 'SOURCES:' in output['answer']:
+            # Split the answer into the main text and the sources
+            answer, raw_sources = output['answer'].split('SOURCES:', 1)
+
+            # Split the raw sources into a list of sources, and remove any leading or trailing whitespaces
+            raw_sources_list = [source.strip() for source in raw_sources.split('- ') if source.strip()]
+
+            # Process each source to turn it back into a valid URL
+            sources = []
+            for raw_source in raw_sources_list:
+                if raw_source:  # Ignore empty strings
+                    # Extract the relevant part of the path and replace '__' with '/'
+                    valid_url = 'https://' + raw_source.split('/')[-1].replace('__', '/').rstrip('.txt')
+                    sources.append(valid_url)
+        else:
+            # If there are no sources, return the answer as is and an empty list for sources
+            answer = output['answer']
+            sources = []
+
+        # Join the sources list into a single string with each source separated by a whitespace
+        sources = ' '.join(sources)
+
+        return answer, sources
+
+
+    def get_answer(self, query):
 
         prompt_template = """Angesichts der folgenden Konversation und einer anschliessenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenständige Frage gestellt werden kann.
             Alle Ausgaben muessen in Deutsch sein.
@@ -73,34 +103,6 @@ class QueryHandler:
             combine_docs_chain=doc_chain,
         )
 
-    def process_output(self, output):
-        # Check if 'SOURCES: \n' is in the output
-        if 'SOURCES:' in output['answer']:
-            # Split the answer into the main text and the sources
-            answer, raw_sources = output['answer'].split('SOURCES:', 1)
-
-            # Split the raw sources into a list of sources, and remove any leading or trailing whitespaces
-            raw_sources_list = [source.strip() for source in raw_sources.split('- ') if source.strip()]
-
-            # Process each source to turn it back into a valid URL
-            sources = []
-            for raw_source in raw_sources_list:
-                if raw_source:  # Ignore empty strings
-                    # Extract the relevant part of the path and replace '__' with '/'
-                    valid_url = 'https://' + raw_source.split('/')[-1].replace('__', '/').rstrip('.txt')
-                    sources.append(valid_url)
-        else:
-            # If there are no sources, return the answer as is and an empty list for sources
-            answer = output['answer']
-            sources = []
-
-        # Join the sources list into a single string with each source separated by a whitespace
-        sources = ' '.join(sources)
-
-        return answer, sources
-
-
-    def get_answer(self, query):
 
         result = self.chain({"question": query, "chat_history": self.chat_history})
 
