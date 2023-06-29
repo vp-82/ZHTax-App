@@ -72,7 +72,7 @@ if user_input:
             is_user = not is_user
 
         # The last message from the user is the current question
-        query = st.session_state.messages[-1]['content'] if st.session_state.messages and st.session_state.messages[-1]['role'] == 'user' else None
+        query = user_input
         logging.info(f"Retrieving answer with question: {query} and history: {history}")
         result = handler.get_answer(query=query, history=history)  # Pass the list of past responses
         logging.info(f"Output before formatting: {result}")
