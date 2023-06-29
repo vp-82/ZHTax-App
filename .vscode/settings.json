@@ -1,0 +1,18 @@
+{
+    "terminal.integrated.env.osx": {"PYTHONPATH": "${workspaceFolder}"},
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": true
+        },
+        "editor.defaultFormatter": "ms-python.black-formatter",
+    },
+    "python.formatting.blackPath": "${env:HOME}/.local/bin/black",
+    "python.linting.flake8Path": "${env:HOME}/.local/bin/flake8",
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": ["--ignore=E226,E302,E41", "--max-line-length=120"],
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintArgs": ["--max-line-length=120", "--disable=W1203,W1406,C0114,C0103"],
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+}
