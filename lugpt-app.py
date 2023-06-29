@@ -3,7 +3,7 @@ from streamlit_chat import message
 
 from lugpt import QueryHandler
 
-st.title("💬 Streamlit GPT")
+st.title("💬 Kanton Luzern GPT")
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
@@ -11,7 +11,7 @@ with st.form("chat_input", clear_on_submit=True):
     a, b = st.columns([4, 1])
     user_input = a.text_input(
         label="Your message:",
-        placeholder="What would you like to say?",
+        placeholder="Was möchten Sie wissen?",
         label_visibility="collapsed",
     )
     b.form_submit_button("Send", use_container_width=True)
