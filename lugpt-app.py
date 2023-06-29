@@ -46,6 +46,7 @@ if user_input:
 
         logging.info(f"Retrieving answer with history: {handler.chat_history}")
         result = handler.get_answer(user_input)  # Pass the list of past responses
+        logging.info(f"Output before formatting: {result}")
         result_de, sources_de = handler.process_output(result)
         result_de_with_sources = " ".join([result_de, sources_de])
         logging.info(f"Output after formatting: {result_de_with_sources}")

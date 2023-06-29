@@ -38,9 +38,9 @@ class QueryHandler:
         )
         self.chat_history = []
 
-        prompt_template = """Angesichts der folgenden Konversation und einer anschließenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenständige Frage gestellt werden kann.
-            Alle Ausgaben müssen in Deutsch sein.
-            Wenn Sie die Antwort nicht kennen, sagen Sie einfach, dass Sie es nicht wissen, versuchen Sie nicht, eine Antwort zu erfinden.
+        prompt_template = """Angesichts der folgenden Konversation und einer anschliessenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenständige Frage gestellt werden kann.
+            Alle Ausgaben muessen in Deutsch sein.
+            Wenn Du die Antwort nicht kennst, sage einfach, dass Du es nicht weisst, versuche nicht, eine Antwort zu erfinden.
 
             Chatverlauf:
             {chat_history}
