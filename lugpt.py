@@ -68,7 +68,7 @@ class QueryHandler:
 
     def get_answer(self, query, history):
 
-        prompt_template = """Angesichts der folgenden Konversation und einer anschliessenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenständige Frage gestellt werden kann.
+        prompt_template = """Angesichts der folgenden Konversation und einer anschliessenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenstaendige Frage gestellt werden kann.
             Alle Ausgaben muessen in Deutsch sein.
             Wenn Du die Antwort nicht kennst, sage einfach, dass Du es nicht weisst, versuche nicht, eine Antwort zu erfinden.
 

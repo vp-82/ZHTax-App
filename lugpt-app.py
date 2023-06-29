@@ -49,31 +49,23 @@ if user_input:
         # Initialize an empty list for the chat history
         history = []
 
-        # We start by assuming the first message is from the user
-        is_user = True
-
-        # The user's query and assistant's reply
-        user_query = None
-        assistant_reply = None
-
         # Iterate through each message in the session state messages
         for msg in st.session_state.messages:
             # If the message is from the user, save it as the user's query
-            if is_user:
+            if msg['role'] == 'user':
                 user_query = msg['content']
             else:
                 # If the message is from the assistant, save it as the assistant's reply
                 assistant_reply = msg['content']
 
                 # Once we have both the user's query and the assistant's reply, add them as a tuple to the chat history
-                history.append((user_query, assistant_reply))
+                if user_query is not None and assistant_reply is not None:
+                    history.append((user_query, assistant_reply))
 
                 # Reset the user's query and the assistant's reply
                 user_query = None
                 assistant_reply = None
 
-            # Toggle the is_user flag
-            is_user = not is_user
 
         # The last message from the user is the current question
         query = user_input
