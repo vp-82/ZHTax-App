@@ -47,13 +47,10 @@ if user_input:
         logging.info(f"Retrieving answer with history: {handler.chat_history}")
         result = handler.get_answer(user_input)  # Pass the list of past responses
 
-    answer_de, source_de = handler.process_output(result)
-
-    answer_with_source_de = " ".join([answer_de, source_de])
 
     # # Store the answer in the list of past responses
-    st.session_state["assistant_responses"].append(answer_de)
+    st.session_state["assistant_responses"].append(result)
 
-    msg = {"role": "assistant", "content": answer_with_source_de}
+    msg = {"role": "assistant", "content": result}
     st.session_state.messages.append(msg)
     message(msg["content"])

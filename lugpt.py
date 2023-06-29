@@ -102,5 +102,4 @@ class QueryHandler:
         result = self.chain({"question": query, "chat_history": self.chat_history})
         result_de, sources_de = self.process_output(result)
         result_de_with_sources = " ".join([result_de, sources_de])
-        self.chat_history.append((query, result_de))
         return result_de_with_sources
