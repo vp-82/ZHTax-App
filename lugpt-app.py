@@ -95,4 +95,4 @@ if prompt := st.chat_input():
     result = handler.get_answer(query=prompt, history=st.session_state.messages)
     response = handler.get_answer(query=prompt, history=st.session_state.messages)
     st.session_state.messages.append({"role": "assistant", "content": response})
-    st.chat_message("assistant").write(msg.content)
+    st.chat_message("assistant").write(response)
