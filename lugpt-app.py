@@ -42,7 +42,7 @@ if user_input:
     # Progress indicator
     with st.spinner("Bereite die Antwort vor..."):
         # Updating conversation history before making a new call
-        history = [(msg['role'], msg['content']) for msg in st.session_state.messages]
+        history = [msg['content'] for msg in st.session_state.messages]
 
         logging.info(f"Retrieving answer with question: {user_input} and history: {handler.chat_history}")
         result = handler.get_answer(user_input, history)  # Pass the list of past responses
@@ -53,5 +53,5 @@ if user_input:
 
     msg = {"role": "assistant", "content": result_de_with_sources}
     st.session_state.messages.append(msg)
-    message(result_de_with_sources)
+    message(msg)
     # message(msg["content"])
