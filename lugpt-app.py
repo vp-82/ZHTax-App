@@ -1,7 +1,14 @@
+import logging
+
 import streamlit as st
 from streamlit_chat import message
 
 from lugpt import QueryHandler
+
+logging.basicConfig(
+    level=logging.INFO,  # Set the logging level
+    format="%(asctime)s [%(levelname)s] %(message)s",  # Set the logging format
+)
 
 st.title("💬 Kanton Luzern GPT")
 
@@ -10,7 +17,7 @@ handler = QueryHandler(openai_api_key=st.secrets["OPENAI_API_KEY"],
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant",
-                                     "content": "How can I help you?"}]
+                                     "content": "Wie kann ich helfen?"}]
 
 if "assistant_responses" not in st.session_state:
     st.session_state["assistant_responses"] = []
@@ -18,7 +25,7 @@ if "assistant_responses" not in st.session_state:
 with st.form("chat_input", clear_on_submit=True):
     a, b = st.columns([4, 1])
     user_input = a.text_input(
-        label="Your message:",
+        label="Ihre nachricht:",
         placeholder="Was möchten Sie wissen?",
         label_visibility="collapsed",
     )
@@ -38,6 +45,8 @@ if user_input:
     answer_de, source_de = handler.process_output(result)
 
     answer_with_source_de = " ".join([answer_de, source_de])
+
+    logging.info(f"Chat history: {handler.chat_history}")
 
     # # Store the answer in the list of past responses
     # st.session_state["assistant_responses"].append(answer)
