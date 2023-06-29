@@ -66,6 +66,7 @@ class QueryHandler:
 
     def process_output(self, output):
         # Check if 'SOURCES: \n' is in the output
+        print(f"Output: {output}")
         if 'SOURCES:' in output['answer']:
             # Split the answer into the main text and the sources
             answer, raw_sources = output['answer'].split('SOURCES:', 1)
