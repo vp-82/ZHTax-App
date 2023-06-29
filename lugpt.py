@@ -2,7 +2,7 @@ import os
 import re
 
 from dotenv import load_dotenv
-from langchain.chains import RetrievalQA
+from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.prompts import PromptTemplate
@@ -29,6 +29,7 @@ class QueryHandler:
             collection_name="LuGPT",
             connection_args=connection_args,
         )
+        self.chat_history = []
 
     def transform_source_to_url(self, source_value: str) -> str:
         match = re.search(r"([a-z]+\.[a-z]+\.[a-z]+)", source_value)
@@ -63,14 +64,13 @@ class QueryHandler:
         )
 
         chain_type_kwargs = {"prompt": PROMPT}
-        llm = ChatOpenAI(model_name=model_type, temperature=0.0)
-        qa = RetrievalQA.from_chain_type(
-            llm=llm,
+        qa = ConversationalRetrievalChain.from_llm(
+            llm=ChatOpenAI(model_name=model_type, temperature=0.0),
             retriever=self.milvus.as_retriever(),
-            chain_type="stuff",
-            return_source_documents=True,
             chain_type_kwargs=chain_type_kwargs,
+            return_source_documents=True
         )
 
-        result = qa({"query": query})
+        result = qa({"query": query, "chat_history": self.chat_history})
+        self.chat_history.append((query, result["answer"]))
         return result

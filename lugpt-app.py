@@ -7,6 +7,9 @@ st.title("💬 Kanton Luzern GPT")
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
+if "assistant_responses" not in st.session_state:
+    st.session_state["assistant_responses"] = []
+
 with st.form("chat_input", clear_on_submit=True):
     a, b = st.columns([4, 1])
     user_input = a.text_input(
@@ -22,14 +25,20 @@ for idx, msg in enumerate(st.session_state.messages):
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
-    
+
     # Initialize QueryHandler and get answer
     handler = QueryHandler(openai_api_key=st.secrets["OPENAI_API_KEY"], milvus_api_key=st.secrets["MILVUS_API_KEY"])
-    result = handler.get_answer(user_input)
-    
+
+    # Progress indicator
+    with st.spinner("Bereite die Antwort vor..."):
+        result = handler.get_answer(user_input, st.session_state["assistant_responses"])  # Pass the list of past responses
+
     # Extract the answer from the result
     answer = result['result']
-    
+
+    # Store the answer in the list of past responses
+    st.session_state["assistant_responses"].append(answer)
+
     msg = {"role": "assistant", "content": answer}
     st.session_state.messages.append(msg)
     message(msg["content"])
