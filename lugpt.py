@@ -61,20 +61,29 @@ class QueryHandler:
         )
 
     def process_output(self, output):
-        # Split the answer into the main text and the sources
-        answer, raw_sources = output['answer'].split('SOURCES:\n', 1)
+        # Check if 'SOURCES: \n' is in the output
+        if 'SOURCES:' in output['answer']:
+            # Split the answer into the main text and the sources
+            answer, raw_sources = output['answer'].split('SOURCES:', 1)
 
-        # Split the raw sources into a list of sources
-        raw_sources_list = raw_sources.split('- ')
+            # Split the raw sources into a list of sources, and remove any leading or trailing whitespaces
+            raw_sources_list = [source.strip() for source in raw_sources.split('- ') if source.strip()]
 
-        # Process each source to turn it back into a valid URL
-        sources = []
-        for raw_source in raw_sources_list:
-            if raw_source:  # Ignore empty strings
-                # Remove the ending '.txt' and replace '__' with '/'
-                valid_url = 'https://' + raw_source.replace('__', '/').rstrip('.txt\n')
-                sources.append(valid_url)
+            # Process each source to turn it back into a valid URL
+            sources = []
+            for raw_source in raw_sources_list:
+                if raw_source:  # Ignore empty strings
+                    # Remove the ending '.txt' and replace '__' with '/'
+                    valid_url = 'https://' + raw_source.replace('__', '/').rstrip('.txt\n')
+                    sources.append(valid_url)
+        else:
+            # If there are no sources, return the answer as is and an empty list for sources
+            answer = output['answer']
+            sources = []
 
+        # Join the sources list into a single string with each source separated by a whitespace
+        sources = ' '.join(sources)
+            
         return answer, sources
 
     def get_answer(self, query):
