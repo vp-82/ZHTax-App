@@ -14,6 +14,7 @@ st.title("💬 Kanton Luzern GPT")
 
 handler = QueryHandler(openai_api_key=st.secrets["OPENAI_API_KEY"],
                        milvus_api_key=st.secrets["MILVUS_API_KEY"])
+logging.info(f"QueryHandler initialized: {handler}")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant",
@@ -40,16 +41,15 @@ if user_input:
 
     # Progress indicator
     with st.spinner("Bereite die Antwort vor..."):
+        logging.info(f"Retrieving answer with history: {handler.chat_history}")
         result = handler.get_answer(user_input)  # Pass the list of past responses
 
     answer_de, source_de = handler.process_output(result)
 
     answer_with_source_de = " ".join([answer_de, source_de])
 
-    logging.info(f"Chat history: {handler.chat_history}")
-
     # # Store the answer in the list of past responses
-    # st.session_state["assistant_responses"].append(answer)
+    st.session_state["assistant_responses"].append(answer_de)
 
     msg = {"role": "assistant", "content": answer_with_source_de}
     st.session_state.messages.append(msg)
