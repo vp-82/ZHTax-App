@@ -38,14 +38,19 @@ for idx, msg in enumerate(st.session_state.messages):
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
-    result_de_with_sources = ""
     # Progress indicator
     with st.spinner("Bereite die Antwort vor..."):
         # Updating conversation history before making a new call
-        history = [msg['content'] for msg in st.session_state.messages]
+        # history = [(msg['role'], msg['content']) for msg in st.session_state.messages]
+        history = []
+        for msg in st.session_state.messages:
+            # Add the content of the message to the chat history
+            history.append(msg['content'])
 
-        logging.info(f"Retrieving answer with question: {user_input} and history: {handler.chat_history}")
-        result = handler.get_answer(user_input, history)  # Pass the list of past responses
+        # The last message from the user is the current question
+        query = st.session_state.messages[-1]['content'] if st.session_state.messages and st.session_state.messages[-1]['role'] == 'user' else None
+        logging.info(f"Retrieving answer with question: {query} and history: {history}")
+        result = handler.get_answer(query=query, history=history)  # Pass the list of past responses
         logging.info(f"Output before formatting: {result}")
         result_de, sources_de = handler.process_output(result)
         result_de_with_sources = " ".join([result_de, sources_de])
