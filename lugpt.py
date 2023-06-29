@@ -66,7 +66,7 @@ class QueryHandler:
         return answer, sources
 
 
-    def get_answer(self, query):
+    def get_answer(self, query, history):
 
         prompt_template = """Angesichts der folgenden Konversation und einer anschliessenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenständige Frage gestellt werden kann.
             Alle Ausgaben muessen in Deutsch sein.
@@ -87,23 +87,25 @@ class QueryHandler:
             template=prompt_template, input_variables=["chat_history", "question"]
         )
 
+        logging.info(f'Prepared prompt: {PROMPT}')
         
         llm = ChatOpenAI(temperature=0, model_name='gpt-3.5-turbo-16k-0613')
         question_generator = LLMChain(llm=llm,
                                     prompt=PROMPT,
                                     )
+        logging.info('Prepared question generator')
         doc_chain = load_qa_with_sources_chain(
                                             llm,
                                             chain_type="map_reduce"
                                             )
 
-        self.chain = ConversationalRetrievalChain(
+        chain = ConversationalRetrievalChain(
             retriever=self.milvus.as_retriever(),
             question_generator=question_generator,
             combine_docs_chain=doc_chain,
         )
 
 
-        result = self.chain({"question": query, "chat_history": self.chat_history})
+        result = chain({"question": query, "chat_history": history})
 
         return result
