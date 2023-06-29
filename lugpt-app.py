@@ -35,15 +35,13 @@ if user_input:
     with st.spinner("Bereite die Antwort vor..."):
         result = handler.get_answer(user_input)  # Pass the list of past responses
 
-    # Extract the answer from the result
-    answer = result['result']
-    answer_de, source_de = handler.process_output(answer)
+    answer_de, source_de = handler.process_output(result)
 
-    " ".join([answer_de, source_de])
+    answer_with_source_de = " ".join([answer_de, source_de])
 
     # # Store the answer in the list of past responses
     # st.session_state["assistant_responses"].append(answer)
 
-    msg = {"role": "assistant", "content": answer}
+    msg = {"role": "assistant", "content": answer_with_source_de}
     st.session_state.messages.append(msg)
     message(msg["content"])
