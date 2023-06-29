@@ -32,16 +32,20 @@ class QueryHandler:
         )
         self.chat_history = []
 
-        prompt_template="""Angesichts der folgenden Konversation und einer anschließenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenständige Frage gestellt werden kann.
-        Alle Ausgaben müssen in Deutsch sein.
-        Wenn Sie die Antwort nicht kennen, sagen Sie einfach, dass Sie es nicht wissen, versuchen Sie nicht, eine Antwort zu erfinden.
+        prompt_template = """Angesichts der folgenden Konversation und einer anschließenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenständige Frage gestellt werden kann.
+            Alle Ausgaben müssen in Deutsch sein.
+            Wenn Sie die Antwort nicht kennen, sagen Sie einfach, dass Sie es nicht wissen, versuchen Sie nicht, eine Antwort zu erfinden.
 
-        Chatverlauf:
-        {chat_history}
-        Nachfrage: {question}
-        Eigenständige Frage:
+            Chatverlauf:
+            {chat_history}
+            Nachfrage: {question}
+            Eigenständige Frage:
 
-        """
+            Zum Beispiel: 
+            Chatverlauf: 'Ich habe gestern einen Film gesehen.' 'Oh, welchen Film haben Sie gesehen?' 'Ich habe Titanic gesehen.'
+            Nachfrage: 'War es traurig?'
+            Eigenständige Frage: 'War der Film Titanic, den Sie gesehen haben, traurig?'
+            """
 
         PROMPT = PromptTemplate(
             template=prompt_template, input_variables=["chat_history", "question"]
