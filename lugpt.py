@@ -72,7 +72,6 @@ class QueryHandler:
 
     def process_output(self, output):
         # Check if 'SOURCES: \n' is in the output
-        logging.info(f"Output: {output}")
         if 'SOURCES:' in output['answer']:
             # Split the answer into the main text and the sources
             answer, raw_sources = output['answer'].split('SOURCES:', 1)
@@ -100,6 +99,5 @@ class QueryHandler:
     def get_answer(self, query):
 
         result = self.chain({"question": query, "chat_history": self.chat_history})
-        result_de, sources_de = self.process_output(result)
-        result_de_with_sources = " ".join([result_de, sources_de])
-        return result_de_with_sources
+
+        return result
