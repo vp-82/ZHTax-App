@@ -49,6 +49,10 @@ if user_input:
         # Initialize an empty list for the chat history
         history = []
 
+        # Initialize user's query and assistant's reply
+        user_query = None
+        assistant_reply = None
+
         # Iterate through each message in the session state messages
         for msg in st.session_state.messages:
             # If the message is from the user, save it as the user's query
@@ -62,9 +66,10 @@ if user_input:
                 if user_query is not None and assistant_reply is not None:
                     history.append((user_query, assistant_reply))
 
-                # Reset the user's query and the assistant's reply
-                user_query = None
-                assistant_reply = None
+                    # Reset the user's query and the assistant's reply
+                    user_query = None
+                    assistant_reply = None
+
 
 
         # The last message from the user is the current question
