@@ -62,7 +62,9 @@ class QueryHandler:
         question_generator = LLMChain(llm=llm,
                                     prompt=PROMPT,
                                     )
-        doc_chain = load_qa_with_sources_chain(llm, chain_type="map_reduce")
+        doc_chain = load_qa_with_sources_chain(llm,
+                                               prompt=PROMPT,
+                                               chain_type="map_reduce")
 
         self.chain = ConversationalRetrievalChain(
             retriever=self.milvus.as_retriever(),
