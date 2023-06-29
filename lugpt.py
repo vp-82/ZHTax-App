@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 
@@ -8,6 +9,11 @@ from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import Milvus
+
+logging.basicConfig(
+    level=logging.INFO,  # Set the logging level
+    format="%(asctime)s [%(levelname)s] %(message)s",  # Set the logging format
+)
 
 
 class QueryHandler:
@@ -66,7 +72,7 @@ class QueryHandler:
 
     def process_output(self, output):
         # Check if 'SOURCES: \n' is in the output
-        print(f"Output: {output}")
+        logging.info(f"Output: {output}")
         if 'SOURCES:' in output['answer']:
             # Split the answer into the main text and the sources
             answer, raw_sources = output['answer'].split('SOURCES:', 1)
