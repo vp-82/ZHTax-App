@@ -2,10 +2,10 @@ import os
 import re
 
 from dotenv import load_dotenv
-from langchain.chains import ConversationalRetrievalChain
+from langchain.chains import ConversationalRetrievalChain, LLMChain
+from langchain.chains.qa_with_sources import load_qa_with_sources_chain
+from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms import OpenAI
-from langchain.memory import ConversationBufferMemory
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import Milvus
 
@@ -31,29 +31,54 @@ class QueryHandler:
             connection_args=connection_args,
         )
         self.chat_history = []
-        self.memory = ConversationBufferMemory(memory_key="chat_history",
-                                               return_messages=True
-                                               )
-        
-        self.qa = ConversationalRetrievalChain.from_llm(OpenAI(temperature=0),
-                                                        self.milvus.as_retriever(),
-                                                        memory=self.memory
-                                                        )
 
-    def transform_source_to_url(self, source_value: str) -> str:
-        match = re.search(r"([a-z]+\.[a-z]+\.[a-z]+)", source_value)
-        if match:
-            url_start_index = match.start()
-        else:
-            raise ValueError("Cannot find a URL in the source value.")
-        url_part = source_value[url_start_index:]
-        url_part = url_part.replace("__", "/")
-        url_part = os.path.splitext(url_part)[0]
-        final_url = "https://" + url_part
-        return final_url
+        prompt_template="""Angesichts der folgenden Konversation und einer anschließenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenständige Frage gestellt werden kann.
+        Alle Ausgaben müssen in Deutsch sein.
+        Wenn Sie die Antwort nicht kennen, sagen Sie einfach, dass Sie es nicht wissen, versuchen Sie nicht, eine Antwort zu erfinden.
+
+        Chatverlauf:
+        {chat_history}
+        Nachfrage: {question}
+        Eigenständige Frage:
+
+        """
+
+        PROMPT = PromptTemplate(
+            template=prompt_template, input_variables=["chat_history", "question"]
+        )
+
+        
+        llm = ChatOpenAI(temperature=0, model_name='gpt-3.5-turbo-16k-0613')
+        question_generator = LLMChain(llm=llm,
+                                    prompt=PROMPT,
+                                    )
+        doc_chain = load_qa_with_sources_chain(llm, chain_type="map_reduce")
+
+        self.chain = ConversationalRetrievalChain(
+            retriever=self.milvus.as_retriever(),
+            question_generator=question_generator,
+            combine_docs_chain=doc_chain,
+        )
+
+    def process_output(self, output):
+        # Split the answer into the main text and the sources
+        answer, raw_sources = output['answer'].split('SOURCES:\n', 1)
+
+        # Split the raw sources into a list of sources
+        raw_sources_list = raw_sources.split('- ')
+
+        # Process each source to turn it back into a valid URL
+        sources = []
+        for raw_source in raw_sources_list:
+            if raw_source:  # Ignore empty strings
+                # Remove the ending '.txt' and replace '__' with '/'
+                valid_url = 'https://' + raw_source.replace('__', '/').rstrip('.txt\n')
+                sources.append(valid_url)
+
+        return answer, sources
 
     def get_answer(self, query):
 
-        result = self.qa({"question": query, "chat_history": self.chat_history})
+        result = self.chain({"question": query, "chat_history": self.chat_history})
         self.chat_history.append((query, result["answer"]))
         return result
