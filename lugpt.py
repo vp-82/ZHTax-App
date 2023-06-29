@@ -83,8 +83,8 @@ class QueryHandler:
             sources = []
             for raw_source in raw_sources_list:
                 if raw_source:  # Ignore empty strings
-                    # Remove the ending '.txt' and replace '__' with '/'
-                    valid_url = 'https://' + raw_source.replace('__', '/').rstrip('.txt\n')
+                    # Extract the relevant part of the path and replace '__' with '/'
+                    valid_url = 'https://' + raw_source.split('/')[-1].replace('__', '/').rstrip('.txt')
                     sources.append(valid_url)
         else:
             # If there are no sources, return the answer as is and an empty list for sources
@@ -93,8 +93,9 @@ class QueryHandler:
 
         # Join the sources list into a single string with each source separated by a whitespace
         sources = ' '.join(sources)
-            
+
         return answer, sources
+
 
     def get_answer(self, query):
 
