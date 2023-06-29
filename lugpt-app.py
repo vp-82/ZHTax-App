@@ -36,26 +36,24 @@ for idx, msg in enumerate(st.session_state.messages):
     message(msg["content"], is_user=msg["role"] == "user", key=idx)
 
 if user_input:
-    st.session_state["user_input"] = user_input  # Save user input to session state
     st.session_state.messages.append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
 
-# Progress indicator
-if "user_input" in st.session_state:
+    # Progress indicator
     with st.spinner("Bereite die Antwort vor..."):
+        # Updating conversation history before making a new call
+        handler.chat_history = [(msg['role'], msg['content']) for msg in st.session_state.messages]
+
         logging.info(f"Retrieving answer with history: {handler.chat_history}")
-        result = handler.get_answer(st.session_state["user_input"])  # Use the saved user input
+        result = handler.get_answer(user_input)  # Pass the list of past responses
 
     answer_de, source_de = handler.process_output(result)
 
     answer_with_source_de = " ".join([answer_de, source_de])
 
-    # Store the answer in the list of past responses
+    # # Store the answer in the list of past responses
     st.session_state["assistant_responses"].append(answer_de)
 
     msg = {"role": "assistant", "content": answer_with_source_de}
     st.session_state.messages.append(msg)
     message(msg["content"])
-
-    del st.session_state["user_input"]  # Delete the saved user input after use
-
