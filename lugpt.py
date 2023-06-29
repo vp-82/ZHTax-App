@@ -63,9 +63,8 @@ class QueryHandler:
                                     prompt=PROMPT,
                                     )
         doc_chain = load_qa_with_sources_chain(
-                                                llm=llm,
-                                                prompt=prompt_template,
-                                                verbose=False,
+                                            llm,
+                                            chain_type="map_reduce"
                                             )
 
         self.chain = ConversationalRetrievalChain(

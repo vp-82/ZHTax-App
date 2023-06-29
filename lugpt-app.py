@@ -44,7 +44,7 @@ if user_input:
         # Updating conversation history before making a new call
         handler.chat_history = [(msg['role'], msg['content']) for msg in st.session_state.messages]
 
-        logging.info(f"Retrieving answer with history: {handler.chat_history}")
+        logging.info(f"Retrieving answer with question: {user_input} and history: {handler.chat_history}")
         result = handler.get_answer(user_input)  # Pass the list of past responses
         logging.info(f"Output before formatting: {result}")
         result_de, sources_de = handler.process_output(result)
