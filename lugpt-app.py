@@ -38,7 +38,7 @@ for idx, msg in enumerate(st.session_state.messages):
 if user_input:
     st.session_state.messages.append({"role": "user", "content": user_input})
     message(user_input, is_user=True)
-
+    result_de_with_sources = ""
     # Progress indicator
     with st.spinner("Bereite die Antwort vor..."):
         # Updating conversation history before making a new call
@@ -53,4 +53,5 @@ if user_input:
 
     msg = {"role": "assistant", "content": result_de_with_sources}
     st.session_state.messages.append(msg)
-    message(msg["content"])
+    message(result_de_with_sources)
+    # message(msg["content"])
