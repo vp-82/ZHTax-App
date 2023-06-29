@@ -82,5 +82,4 @@ if user_input:
 
     msg = {"role": "assistant", "content": result_de_with_sources}
     st.session_state.messages.append(msg)
-    message(msg)
-    # message(msg["content"])
+    message(msg["content"])
