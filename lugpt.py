@@ -52,26 +52,8 @@ class QueryHandler:
         final_url = "https://" + url_part
         return final_url
 
-    def get_answer(self, query, language="German"):
-        if language == "German":
-            model_type = "gpt-3.5-turbo-16k-0613"
-        else:
-            model_type = "gpt-4-0613"
+    def get_answer(self, query):
 
-        prompt_template = f"""You are an assistant that answers questions about the Kanton Luzern,
-         based on given information. Only use the information that was provided below.
-         Use the following pieces of context to answer the question at the end.
-         If you don't know the answer, just say that you don't know, don't try to make up an answer.
-
-        {{context}}
-
-        Question: {{question}}
-        Answer in {language}:"""
-
-        PROMPT = PromptTemplate(
-            template=prompt_template, input_variables=["context", "question"]
-        )
-
-        result = self.qa({"question": PROMPT, "chat_history": self.chat_history})
+        result = self.qa({"question": query, "chat_history": self.chat_history})
         self.chat_history.append((query, result["answer"]))
         return result
