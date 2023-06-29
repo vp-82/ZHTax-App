@@ -42,10 +42,34 @@ if user_input:
     with st.spinner("Bereite die Antwort vor..."):
         # Updating conversation history before making a new call
         # history = [(msg['role'], msg['content']) for msg in st.session_state.messages]
+        # Initialize an empty list for the chat history
         history = []
+
+        # We start by assuming the first message is from the user
+        is_user = True
+
+        # The user's query and assistant's reply
+        user_query = None
+        assistant_reply = None
+
+        # Iterate through each message in the session state messages
         for msg in st.session_state.messages:
-            # Add the content of the message to the chat history
-            history.append(msg['content'])
+            # If the message is from the user, save it as the user's query
+            if is_user:
+                user_query = msg['content']
+            else:
+                # If the message is from the assistant, save it as the assistant's reply
+                assistant_reply = msg['content']
+
+                # Once we have both the user's query and the assistant's reply, add them as a tuple to the chat history
+                history.append((user_query, assistant_reply))
+
+                # Reset the user's query and the assistant's reply
+                user_query = None
+                assistant_reply = None
+
+            # Toggle the is_user flag
+            is_user = not is_user
 
         # The last message from the user is the current question
         query = st.session_state.messages[-1]['content'] if st.session_state.messages and st.session_state.messages[-1]['role'] == 'user' else None
