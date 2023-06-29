@@ -20,8 +20,8 @@ if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant",
                                      "content": "Wie kann ich helfen?"}]
 
-# if "assistant_responses" not in st.session_state:
-#     st.session_state["assistant_responses"] = []
+if "assistant_responses" not in st.session_state:
+    st.session_state["assistant_responses"] = []
 
 # # Add a button to clear the chat
 # # if st.button("Clear Chat"):
