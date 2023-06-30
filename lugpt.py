@@ -75,12 +75,8 @@ class QueryHandler:
             Chatverlauf:
             {chat_history}
             Nachfrage: {question}
+            Alle Ausgaben muessen in Deutsch sein.
             Eigenständige Frage:
-
-            Zum Beispiel: 
-            Chatverlauf: 'Ich habe gestern einen Film gesehen.' 'Oh, welchen Film haben Sie gesehen?' 'Ich habe Titanic gesehen.'
-            Nachfrage: 'War es traurig?'
-            Eigenständige Frage: 'War der Film Titanic, den Sie gesehen haben, traurig?'
             """
 
         PROMPT = PromptTemplate(
