@@ -93,7 +93,7 @@ if prompt := st.chat_input():
 
     history = []
     user_message = None
-    for msg in message_dicts:
+    for msg in st.session_state.messages:
         if msg['role'] == 'user':
             user_message = msg['content']
         elif user_message is not None:

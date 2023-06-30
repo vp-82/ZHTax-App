@@ -69,13 +69,13 @@ class QueryHandler:
     def get_answer(self, query, history):
 
         prompt_template = """Angesichts der folgenden Konversation und einer anschliessenden Frage, formulieren Sie die Nachfrage so um, dass sie als eigenstaendige Frage gestellt werden kann.
-            Alle Ausgaben muessen in Deutsch sein.
+            Alle Fragen und Antworten muessen auf Deutsch sein.
             Wenn Du die Antwort nicht kennst, sage einfach, dass Du es nicht weisst, versuche nicht, eine Antwort zu erfinden.
 
             Chatverlauf:
             {chat_history}
             Nachfrage: {question}
-            Alle Ausgaben muessen in Deutsch sein.
+            Alle Fragen und Antworten muessen auf Deutsch sein.
             Eigenständige Frage:
             """
 
