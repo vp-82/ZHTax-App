@@ -89,7 +89,18 @@ for msg in st.session_state.messages:
 
 if prompt := st.chat_input():
     
-    history = [(msg['role'], msg['content']) for msg in st.session_state.messages]
+    message_dicts = [{'role': 'assistant', 'content': 'Wie kann ich helfen?'}, {'role': 'user', 'content': 'Was macht die Dienststelle Informatik?'}]
+
+    history = []
+    user_message = None
+    for msg in message_dicts:
+        if msg['role'] == 'user':
+            user_message = msg['content']
+        elif user_message is not None:
+            history.append((user_message, msg['content']))
+            user_message = None
+
+    logging.info(f"Created hitory from message state: {history}")
 
     st.session_state.messages.append({"role": "user", "content": prompt})
     st.chat_message("user").write(prompt)
