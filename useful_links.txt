@@ -1,0 +1,7 @@
+Useful links (not in specific order):
+https://python.langchain.com/docs/modules/chains/popular/chat_vector_db
+https://github.com/hwchase17/langchain/issues/3737
+https://github.com/hwchase17/langchain/blob/master/langchain/chains/qa_with_sources/stuff_prompt.py
+https://github.com/hwchase17/langchain/issues/3523
+https://github.com/hwchase17/langchain/blob/master/langchain/chains/qa_with_sources/stuff_prompt.py
+https://towardsdatascience.com/a-gentle-intro-to-chaining-llms-agents-and-utils-via-langchain-16cd385fca81

@@ -1,7 +1,6 @@
 import logging
 
 import streamlit as st
-from streamlit_chat import message
 
 from lugpt import QueryHandler
 
@@ -23,9 +22,14 @@ if "messages" not in st.session_state:
 for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg["content"])
 
+if st.button("Reset Conversation"):
+    st.session_state.messages = []
+    st.experimental_rerun()
+
 if prompt := st.chat_input():
-    
-    message_dicts = [{'role': 'assistant', 'content': 'Wie kann ich helfen?'}, {'role': 'user', 'content': 'Was macht die Dienststelle Informatik?'}]
+
+    message_dicts = [{'role': 'assistant',
+                      'content': 'Wie kann ich helfen?'}]
 
     history = []
     user_message = None
