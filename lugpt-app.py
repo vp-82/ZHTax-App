@@ -9,7 +9,9 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] %(message)s",  # Set the logging format
 )
 
-st.title("💬 Kanton Luzern GPT")
+st.warning("⚠️ This app is currently under maintenance. Some features may not work as expected.")
+
+st.title("💬 Kanton Luzern GPT: derzeit steht die App nicht zur Verfügung")
 
 handler = QueryHandler(openai_api_key=st.secrets["OPENAI_API_KEY"],
                        milvus_api_key=st.secrets["MILVUS_API_KEY"])
