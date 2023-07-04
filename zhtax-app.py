@@ -2,16 +2,16 @@ import logging
 
 import streamlit as st
 
-from lugpt import QueryHandler
+from zhtaxgpt import QueryHandler
 
 logging.basicConfig(
     level=logging.INFO,  # Set the logging level
     format="%(asctime)s [%(levelname)s] %(message)s",  # Set the logging format
 )
 
-st.warning("⚠️ This app is currently under maintenance. Some features may not work as expected.")
+# st.warning("⚠️ This app is currently under maintenance. Some features may not work as expected.")
 
-st.title("💬 Kanton Luzern GPT: derzeit steht die App nicht zur Verfügung")
+st.title("💬 Verwaltungsassistent")
 
 handler = QueryHandler(openai_api_key=st.secrets["OPENAI_API_KEY"],
                        milvus_api_key=st.secrets["MILVUS_API_KEY"])

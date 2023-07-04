@@ -33,7 +33,7 @@ class QueryHandler:
         self.embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
         self.milvus = Milvus(
             embedding_function=self.embeddings,
-            collection_name="LuGPT",
+            collection_name="ZHTax",
             connection_args=connection_args,
         )
         self.chat_history = []
